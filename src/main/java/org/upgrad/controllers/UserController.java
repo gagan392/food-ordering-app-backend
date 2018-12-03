@@ -39,7 +39,7 @@ public class UserController {
         String sha256hex = Hashing.sha256()
                 .hashString(password, Charsets.US_ASCII)
                 .toString();
-        if(userService.findUserPassword(contactNumber)==null) return new ResponseEntity<>("This contact number has not been registered!",HttpStatus.OK);
+        if(userService.findUserPassword(contactNumber)==null) return new ResponseEntity<>("This contact number has not been registered!",HttpStatus.UNAUTHORIZED);
         else if (!(passwordByUser.equalsIgnoreCase(sha256hex))) {
             return new ResponseEntity<>("Invalid Credentials",HttpStatus.UNAUTHORIZED);
         }
