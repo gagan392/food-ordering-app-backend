@@ -99,7 +99,10 @@ public class UserController {
             return new ResponseEntity<Object>("Weak password!", HttpStatus.BAD_REQUEST);
         }
 
-        userService.addUser(firstName, lastName, email, contactNumber, password);
+        String sha256hex = Hashing.sha256()
+                .hashString(password, Charsets.US_ASCII)
+                .toString();
+        userService.addUser(firstName, lastName, email, contactNumber, sha256hex);
 
         return new ResponseEntity<Object>("User with contact number "+ contactNumber +" successfully registered!", HttpStatus.CREATED);
     }
