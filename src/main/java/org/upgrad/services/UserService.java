@@ -14,4 +14,6 @@ public interface UserService {
     String findUserPassword(String contactNumber);
 
     User findUser(String contactNumber);
+
+    void addUser(String firstName, String lastName, String email, String contactNumber, String password);
 }

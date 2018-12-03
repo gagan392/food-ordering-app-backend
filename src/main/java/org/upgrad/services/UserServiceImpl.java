@@ -29,4 +29,9 @@ public class UserServiceImpl implements UserService{
         return userRepository.findUser(contactNumber);
     }
 
+    @Override
+    public void addUser(String firstName, String lastName, String email, String contactNumber, String password) {
+        User user = new User(firstName, lastName, email, contactNumber, password);
+        userRepository.save(user);
+    }
 }
