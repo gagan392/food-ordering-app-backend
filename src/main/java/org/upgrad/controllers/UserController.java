@@ -95,7 +95,7 @@ public class UserController {
             return new ResponseEntity<Object>("Invalid contact number!", HttpStatus.BAD_REQUEST);
         }
 
-        if(password.length() < Constants.PASSWORD_MIN_LENGTH || password.equals(password.toLowerCase()) || !Constants.NUMBER_REGEX.matcher(password).matches() || password.contains(Constants.SPECIAL_CHARS)){
+        if(password.length() < Constants.PASSWORD_MIN_LENGTH || password.equals(password.toLowerCase()) || !Constants.NUMBER_REGEX.matcher(password).matches() || !Constants.SPECIAL_REGEX.matcher(password).find()){
             return new ResponseEntity<Object>("Weak password!", HttpStatus.BAD_REQUEST);
         }
 
