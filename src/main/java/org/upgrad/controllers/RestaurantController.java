@@ -3,10 +3,7 @@ package org.upgrad.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.upgrad.models.Restaurant;
 import org.upgrad.models.RestaurantCategory;
 import org.upgrad.requestResponseEntity.RestaurantResponse;
@@ -33,6 +30,26 @@ public class RestaurantController {
     @CrossOrigin
     public ResponseEntity<?> fetchRestaurantList() {
         List<Restaurant> restaurants = restaurantService.getAll();
+        return new ResponseEntity<>(mapRestaurantResponse(restaurants), HttpStatus.OK);
+    }
+
+    /*
+     * This endpoint is used to list down only the Restaurants having user provided name
+     * name is partial/exact match, case insensitive match
+     * sorting restaurants based on user rating
+     * categories string in an alphabetical order
+     */
+    @GetMapping("name/{reastaurantName}")
+    @CrossOrigin
+    public ResponseEntity<?> fetchRestaurantByName(@PathVariable String reastaurantName) {
+        List<Restaurant> restaurants = restaurantService.getByName(reastaurantName);
+        if(restaurants.size() == 0) {
+            return new ResponseEntity<Object>("No Restaurant by this name!", HttpStatus.OK);
+        }
+        return new ResponseEntity<Object>(mapRestaurantResponse(restaurants), HttpStatus.OK);
+    }
+
+    List<RestaurantResponse> mapRestaurantResponse(List<Restaurant> restaurants) {
         List<RestaurantResponse> restaurantResponses = new ArrayList<>();
         for (Restaurant restaurant : restaurants) {
             List<RestaurantCategory> restaurantCategories = restaurant.getRestaurantCategories();
@@ -40,11 +57,10 @@ public class RestaurantController {
             for (RestaurantCategory restaurantCategory : restaurantCategories) {
                 categories.add(restaurantCategory.getCategory().getCategoryName());
             }
-            //
             Collections.sort(categories);
             String categoriesCsv = String.join(",", categories);
             restaurantResponses.add(new RestaurantResponse(restaurant.getId(), restaurant.getRestaurantName(), restaurant.getPhotoUrl(), restaurant.getUserRating(), restaurant.getAvgPrice(), restaurant.getNumberUsersRated(), restaurant.getAddress(), categoriesCsv));
         }
-        return new ResponseEntity<>(restaurantResponses, HttpStatus.OK);
+        return  restaurantResponses;
     }
 }

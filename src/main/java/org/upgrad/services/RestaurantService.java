@@ -8,4 +8,5 @@ public interface RestaurantService {
 
     List<Restaurant> getAll();
 
+    List<Restaurant> getByName(String restaurantName);
 }

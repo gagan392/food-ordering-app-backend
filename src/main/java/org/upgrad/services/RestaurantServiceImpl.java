@@ -1,6 +1,5 @@
 package org.upgrad.services;
 
-import com.google.common.collect.Lists;
 import org.springframework.stereotype.Service;
 import org.upgrad.models.Restaurant;
 import org.upgrad.repositories.RestaurantRepository;
@@ -20,5 +19,10 @@ public class RestaurantServiceImpl implements RestaurantService {
     public List<Restaurant> getAll() {
         List<Restaurant> restaurants = restaurantRepository.getAll();
         return restaurants;
+    }
+
+    @Override
+    public List<Restaurant> getByName(String restaurantName) {
+        return restaurantRepository.getByName(restaurantName);
     }
 }
