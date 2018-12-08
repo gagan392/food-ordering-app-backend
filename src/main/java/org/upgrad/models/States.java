@@ -3,7 +3,7 @@ package org.upgrad.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "state")
+@Table(name = "states")
 public class States {
 
     @Id

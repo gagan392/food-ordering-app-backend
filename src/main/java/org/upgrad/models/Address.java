@@ -12,7 +12,7 @@ public class Address {
     private int id;
 
     @Column(name = "flat_buil_number")
-    private int flatBuildNumber;
+    private String flatBuilNo;
 
     @Column(name = "locality")
     private String locality;
@@ -25,17 +25,17 @@ public class Address {
 
     @ManyToOne
     @JoinColumn(name = "state_id")
-    private States states;
+    private States state;
 
     public Address() {
     }
 
-    public Address(int flatBuildNumber, String locality, String city, String zipcode, States states) {
-        this.flatBuildNumber = flatBuildNumber;
+    public Address(String flatBuilNo, String locality, String city, String zipcode, States state) {
+        this.flatBuilNo = flatBuilNo;
         this.locality = locality;
         this.city = city;
         this.zipcode = zipcode;
-        this.states = states;
+        this.state = state;
     }
 
     public int getId() {
@@ -46,12 +46,12 @@ public class Address {
         this.id = id;
     }
 
-    public int getFlatBuildNumber() {
-        return flatBuildNumber;
+    public String getFlatBuilNo() {
+        return flatBuilNo;
     }
 
-    public void setFlatBuildNumber(int flatBuildNumber) {
-        this.flatBuildNumber = flatBuildNumber;
+    public void setFlatBuilNo(String flatBuilNo) {
+        this.flatBuilNo = flatBuilNo;
     }
 
     public String getLocality() {
@@ -78,11 +78,11 @@ public class Address {
         this.zipcode = zipcode;
     }
 
-    public States getStates() {
-        return states;
+    public States getState() {
+        return state;
     }
 
-    public void setStates(States states) {
-        this.states = states;
+    public void setState(States state) {
+        this.state = state;
     }
 }
