@@ -25,4 +25,9 @@ public class RestaurantServiceImpl implements RestaurantService {
     public List<Restaurant> getByName(String restaurantName) {
         return restaurantRepository.getByName(restaurantName);
     }
+
+    @Override
+    public List<Restaurant> getByCategoryName(String categoryName) {
+        return restaurantRepository.getByCategoryName(categoryName);
+    }
 }

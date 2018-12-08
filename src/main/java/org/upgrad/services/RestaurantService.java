@@ -9,4 +9,6 @@ public interface RestaurantService {
     List<Restaurant> getAll();
 
     List<Restaurant> getByName(String restaurantName);
+
+    List<Restaurant> getByCategoryName(String categoryName);
 }
