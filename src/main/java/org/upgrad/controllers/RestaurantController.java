@@ -30,19 +30,7 @@ public class RestaurantController {
     @CrossOrigin
     public ResponseEntity<?> fetchRestaurantList() {
         List<Restaurant> restaurants = restaurantService.getAll();
-        List<RestaurantResponse> restaurantResponses = new ArrayList<>();
-        for (Restaurant restaurant : restaurants) {
-            List<RestaurantCategory> restaurantCategories = restaurant.getRestaurantCategories();
-            List<String> categories = new ArrayList<>();
-            for (RestaurantCategory restaurantCategory : restaurantCategories) {
-                categories.add(restaurantCategory.getCategory().getCategoryName());
-            }
-            //
-            Collections.sort(categories);
-            String categoriesCsv = String.join(",", categories);
-            restaurantResponses.add(new RestaurantResponse(restaurant.getId(), restaurant.getRestaurantName(), restaurant.getPhotoUrl(), restaurant.getUserRating(), restaurant.getAvgPrice(), restaurant.getNumberUsersRated(), restaurant.getAddress(), categoriesCsv));
-        }
-        return new ResponseEntity<>(restaurantResponses, HttpStatus.OK);
+        return new ResponseEntity<>(mapRestaurantResponse(restaurants), HttpStatus.OK);
     }
 
     /*
