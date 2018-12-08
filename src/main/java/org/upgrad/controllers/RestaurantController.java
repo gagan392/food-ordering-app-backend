@@ -49,6 +49,23 @@ public class RestaurantController {
         return new ResponseEntity<Object>(mapRestaurantResponse(restaurants), HttpStatus.OK);
     }
 
+
+    /*
+     * This endpoint is used to list down only the Restaurants having user provided category name
+     * category name is partial/exact match, case insensitive match
+     * sorting restaurants in alphabetical order
+     * categories string in an alphabetical order
+     */
+    @GetMapping("category/{categoryName}")
+    @CrossOrigin
+    public ResponseEntity<?> fetchRestaurantByCategoryName(@PathVariable String categoryName) {
+        List<Restaurant> restaurants = restaurantService.getByCategoryName(categoryName);
+        if(restaurants.size() == 0) {
+            return new ResponseEntity<Object>("No Restaurant by this category!", HttpStatus.OK);
+        }
+        return new ResponseEntity<Object>(mapRestaurantResponse(restaurants), HttpStatus.OK);
+    }
+
     List<RestaurantResponse> mapRestaurantResponse(List<Restaurant> restaurants) {
         List<RestaurantResponse> restaurantResponses = new ArrayList<>();
         for (Restaurant restaurant : restaurants) {
