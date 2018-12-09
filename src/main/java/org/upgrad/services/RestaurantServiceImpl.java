@@ -37,4 +37,9 @@ public class RestaurantServiceImpl implements RestaurantService {
         Optional<Restaurant> restaurant = restaurantRepository.findById(restaurantId);
         return restaurant.orElse(null);
     }
+
+    @Override
+    public Restaurant update(Restaurant restaurant) {
+        return restaurantRepository.save(restaurant);
+    }
 }

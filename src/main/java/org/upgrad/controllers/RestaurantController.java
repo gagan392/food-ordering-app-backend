@@ -9,6 +9,7 @@ import org.upgrad.requestResponseEntity.CategoryResponse;
 import org.upgrad.requestResponseEntity.RestaurantResponse;
 import org.upgrad.requestResponseEntity.RestaurantResponseCategorySet;
 import org.upgrad.services.RestaurantService;
+import org.upgrad.services.UserAuthTokenService;
 
 import java.util.*;
 
@@ -18,6 +19,9 @@ public class RestaurantController {
 
     @Autowired
     private RestaurantService restaurantService;
+
+    @Autowired
+    private UserAuthTokenService userAuthTokenService;
 
     /*
     * This endpoint is used to list down all the Restaurants with categories and address.
@@ -78,6 +82,33 @@ public class RestaurantController {
             return new ResponseEntity<Object>("No Restaurant by this id!", HttpStatus.OK);
         }
         return new ResponseEntity<Object>(mapRestaurantResponseCategorySet(restaurant), HttpStatus.OK);
+    }
+
+    /*
+     * This endpoint is used to update the Restaurants by id
+     * user authentication
+     */
+    @PutMapping("/{restaurantId}")
+    @CrossOrigin
+    public ResponseEntity<?> updateRestaurantById(@RequestHeader String accessToken, @PathVariable int restaurantId, @RequestParam double restaurantRating) {
+        if (userAuthTokenService.isUserLoggedIn(accessToken) == null) {
+            return new ResponseEntity<>("Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
+        } else if (userAuthTokenService.isUserLoggedIn(accessToken).getLogoutAt() != null) {
+            return new ResponseEntity<>("You have already logged out. Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
+        }
+
+        Restaurant restaurant = restaurantService.getById(restaurantId);
+        if (restaurant == null) {
+            return new ResponseEntity<Object>("No Restaurant by this id!", HttpStatus.OK);
+        }
+
+        double avgUserRating = restaurant.getUserRating();
+        double updatedRating = (avgUserRating * restaurant.getNumberUsersRated() + restaurantRating) / (restaurant.getNumberUsersRated() + 1);
+        restaurant.setNumberUsersRated(restaurant.getNumberUsersRated() + 1);
+        restaurant.setUserRating(updatedRating);
+        restaurantService.update(restaurant);
+
+        return new ResponseEntity<Object>(mapRestaurantResponse(restaurant), HttpStatus.OK);
     }
 
     RestaurantResponse mapRestaurantResponse(Restaurant restaurant) {
