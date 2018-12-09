@@ -48,4 +48,19 @@ public class CategoryResponse {
     public void setItems(Set<Item> items) {
         this.items = items;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CategoryResponse that = (CategoryResponse) o;
+
+        return categoryName.equals(that.categoryName);
+    }
+
+    @Override
+    public int hashCode() {
+        return categoryName.hashCode();
+    }
 }
