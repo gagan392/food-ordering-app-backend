@@ -7,7 +7,7 @@ import org.upgrad.models.Address;
 
 
 @Repository
-public interface AddressRepository extends CrudRepository<Object, Integer> {
+public interface AddressRepository extends CrudRepository<Address, Integer> {
     @Query(nativeQuery = true,value="SELECT locality FROM address WHERE id=?1")
     String findAddressById(int id);
 }

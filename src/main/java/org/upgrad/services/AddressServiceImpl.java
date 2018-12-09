@@ -6,6 +6,7 @@ import org.upgrad.models.States;
 import org.upgrad.models.UserAddress;
 import org.upgrad.repositories.AddressRepository;
 import org.upgrad.repositories.StateRepository;
+import org.upgrad.repositories.UserAddressRepository;
 
 import javax.transaction.Transactional;
 
@@ -15,10 +16,12 @@ public class AddressServiceImpl implements AddressService{
 
     private final AddressRepository addRepo;
     private final StateRepository stateRepo;
+    private final UserAddressRepository userAddRepo;
 
-    public AddressServiceImpl(AddressRepository addRepo, StateRepository stateRepo) {
+    public AddressServiceImpl(AddressRepository addRepo, StateRepository stateRepo,UserAddressRepository userAddRepo) {
         this.addRepo = addRepo;
         this.stateRepo = stateRepo;
+        this.userAddRepo = userAddRepo;
     }
 
 
@@ -57,7 +60,7 @@ public class AddressServiceImpl implements AddressService{
         System.out.printf("[updateUserAddressOnNewAddressInsert]");
         UserAddress currUserToAdd = new UserAddress(type,userID,addressId);
 
-        addRepo.save(currUserToAdd);
+        userAddRepo.save(currUserToAdd);
 
     }
 }
