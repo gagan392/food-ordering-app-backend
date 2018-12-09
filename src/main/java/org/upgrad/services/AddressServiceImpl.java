@@ -1,5 +1,6 @@
 package org.upgrad.services;
 
+
 import org.springframework.stereotype.Service;
 import org.upgrad.models.Address;
 import org.upgrad.models.States;
@@ -7,6 +8,7 @@ import org.upgrad.models.UserAddress;
 import org.upgrad.repositories.AddressRepository;
 import org.upgrad.repositories.StateRepository;
 import org.upgrad.repositories.UserAddressRepository;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -27,16 +29,18 @@ public class AddressServiceImpl implements AddressService{
 
     @Override
     public Address addAddress(String locality,String flat_building_number ,String city ,  String zipcode, int stateId) {
-        Address addNew = new Address(locality,flat_building_number ,city ,zipcode,stateId);
+        States curState =  stateRepo.findStateById(stateId);
+        Address addNew = new Address(locality,flat_building_number ,city ,zipcode,curState);
         //The save method is given by JPA hence need not be specifically written
-        System.out.printf("[ADDRESS SERVICE] Details from the request - %s , %s , %s , %s , %d\n",locality,flat_building_number ,city ,zipcode,stateId);
+        System.out.printf("[ADDRESS SERVICE] Details from the request - %s , %s , %s , %s , %s\n",locality,flat_building_number ,city ,zipcode,curState.getStateName());
         return addRepo.save(addNew);
 
     }
 
     @Override
     public Iterable<Address> getAllPermAddressForUser(String accessToken) {
-        return null;
+        accessToken = "";
+        return addRepo.getAllPermAddByUser(1);
     }
 
     @Override
@@ -44,9 +48,8 @@ public class AddressServiceImpl implements AddressService{
         return false;
     }
 
-    @Override
-    public boolean deletePermAddressForUser(int addressId) {
-        return false;
+    public void deletePermAddressForUser(int addressId) {
+        addRepo.deleteById(addressId);
     }
 
     @Override
@@ -62,5 +65,10 @@ public class AddressServiceImpl implements AddressService{
 
         userAddRepo.save(currUserToAdd);
 
+    }
+    @Override
+    public List<Address> findAllAdressById(int pId){
+        List<Address> allAddress = addRepo.findAddressByGivenId(pId);
+        return allAddress;
     }
 }

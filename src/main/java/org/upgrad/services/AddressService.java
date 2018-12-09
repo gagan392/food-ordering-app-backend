@@ -1,9 +1,11 @@
 package org.upgrad.services;
 
-import com.sun.tools.javac.util.List;
+
 import org.springframework.stereotype.Service;
 import org.upgrad.models.Address;
 import org.upgrad.models.States;
+
+import java.util.List;
 
 
 public interface AddressService {
@@ -18,11 +20,18 @@ public interface AddressService {
     boolean updatePermAddressForUser(int addressId);
 
     //EndPoint#4 Delete Permanent Address
-    boolean deletePermAddressForUser(int addressId);
+    void deletePermAddressForUser(int addressId);
 
     //EndPoint#5 Get All States
     Iterable<States> getAllStates();
 
+    //Helper Methods
+    /* When a new address is inserted it has to linked in the User_Address table to maintain
+    * Many To Many relation between User and Permanent Address
+    * Thus the User_Address table gets an update when we add a new permanent or temp address
+    * */
     void updateUserAddressOnNewAddressInsert(int userID,int addressId,String type);
 
+
+    List<Address> findAllAdressById(int pId);
 }
