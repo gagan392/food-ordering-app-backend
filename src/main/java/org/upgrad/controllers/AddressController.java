@@ -65,6 +65,7 @@ public class AddressController {
 
 
         //Now need to add the two information in the user_address table.
+        addCRUD.updateUserAddressOnNewAddressInsert(loggedInUserId,currAddress.getId(),Type);
         //return new ResponseEntity<Object>(mapRestaurantResponse(restaurant), HttpStatus.OK);
         return null;
     }
