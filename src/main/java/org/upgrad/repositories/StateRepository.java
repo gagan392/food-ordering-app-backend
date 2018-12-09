@@ -1,5 +1,10 @@
 package org.upgrad.repositories;
 
-public interface StateRepository{
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+import org.upgrad.models.States;
+
+@Repository
+public interface StateRepository extends CrudRepository<States, Integer> {
 
 }
