@@ -5,6 +5,7 @@ import org.upgrad.models.Restaurant;
 import org.upgrad.repositories.RestaurantRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
@@ -29,5 +30,11 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Override
     public List<Restaurant> getByCategoryName(String categoryName) {
         return restaurantRepository.getByCategoryName(categoryName);
+    }
+
+    @Override
+    public Restaurant getById(int restaurantId) {
+        Optional<Restaurant> restaurant = restaurantRepository.findById(restaurantId);
+        return restaurant.orElse(null);
     }
 }
