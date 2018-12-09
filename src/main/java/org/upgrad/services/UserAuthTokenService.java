@@ -13,4 +13,6 @@ public interface UserAuthTokenService {
     void removeAccessToken(String accessToken);
 
     UserAuthToken isUserLoggedIn(String accessToken);
+
+    int getUserId(String accessToken);
 }
