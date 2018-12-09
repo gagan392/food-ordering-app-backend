@@ -3,8 +3,10 @@ package org.upgrad.services;
 import org.springframework.stereotype.Service;
 import org.upgrad.models.Address;
 import org.upgrad.models.States;
+import org.upgrad.models.UserAddress;
 import org.upgrad.repositories.AddressRepository;
 import org.upgrad.repositories.StateRepository;
+import org.upgrad.repositories.UserAddressRepository;
 
 import javax.transaction.Transactional;
 
@@ -14,10 +16,12 @@ public class AddressServiceImpl implements AddressService{
 
     private final AddressRepository addRepo;
     private final StateRepository stateRepo;
+    private final UserAddressRepository userAddRepo;
 
-    public AddressServiceImpl(AddressRepository addRepo, StateRepository stateRepo) {
+    public AddressServiceImpl(AddressRepository addRepo, StateRepository stateRepo,UserAddressRepository userAddRepo) {
         this.addRepo = addRepo;
         this.stateRepo = stateRepo;
+        this.userAddRepo = userAddRepo;
     }
 
 
@@ -51,9 +55,12 @@ public class AddressServiceImpl implements AddressService{
     }
 
     @Override
-    public void updateUserAddressOnNewAddressInsert(String userID,String addressId,String type){
+    public void updateUserAddressOnNewAddressInsert(int userID,int addressId,String type){
         //When a new address was added it should be updated in the User_Address Table.
+        System.out.printf("[updateUserAddressOnNewAddressInsert]");
+        UserAddress currUserToAdd = new UserAddress(type,userID,addressId);
 
+        userAddRepo.save(currUserToAdd);
 
     }
 }
