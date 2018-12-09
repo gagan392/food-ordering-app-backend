@@ -3,6 +3,7 @@ package org.upgrad.repositories;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+import org.upgrad.models.Address;
 import org.upgrad.models.Restaurant;
 
 import java.util.List;
@@ -21,5 +22,6 @@ public interface RestaurantRepository extends CrudRepository<Restaurant, Integer
             "inner join CATEGORY AS ca on rc.category_id = ca.id\n" +
             "WHERE LOWER(ca.CATEGORY_NAME) LIKE LOWER(concat('%', ?1, '%')) ORDER BY re.RESTAURANT_NAME ")
     List<Restaurant> getByCategoryName(String categoryName);
+
 
 }

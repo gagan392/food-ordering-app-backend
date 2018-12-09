@@ -9,5 +9,6 @@ public class Constants {
     public static final Integer PASSWORD_MIN_LENGTH = 8;
     public static final Pattern NUMBER_REGEX = Pattern.compile(".*\\d+.*");
     public static final Pattern SPECIAL_REGEX = Pattern.compile("[#@$%&*!^]");
+    public static final Pattern VALID_ZIP_CODE = Pattern.compile("\\d{5}");
 
 }
