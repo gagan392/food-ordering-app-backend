@@ -3,6 +3,7 @@ package org.upgrad.services;
 import org.springframework.stereotype.Service;
 import org.upgrad.models.Address;
 import org.upgrad.models.States;
+import org.upgrad.models.UserAddress;
 import org.upgrad.repositories.AddressRepository;
 import org.upgrad.repositories.StateRepository;
 
@@ -51,9 +52,12 @@ public class AddressServiceImpl implements AddressService{
     }
 
     @Override
-    public void updateUserAddressOnNewAddressInsert(String userID,String addressId,String type){
+    public void updateUserAddressOnNewAddressInsert(int userID,int addressId,String type){
         //When a new address was added it should be updated in the User_Address Table.
+        System.out.printf("[updateUserAddressOnNewAddressInsert]");
+        UserAddress currUserToAdd = new UserAddress(type,userID,addressId);
 
+        addRepo.save(currUserToAdd);
 
     }
 }

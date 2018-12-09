@@ -23,6 +23,6 @@ public interface AddressService {
     //EndPoint#5 Get All States
     Iterable<States> getAllStates();
 
-    void updateUserAddressOnNewAddressInsert(String userID,String addressId,String type);
+    void updateUserAddressOnNewAddressInsert(int userID,int addressId,String type);
 
 }
