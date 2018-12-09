@@ -37,10 +37,16 @@ public class AddressController {
         * */
 
         UserAuthToken userAuthToken = userAuthTokenService.isUserLoggedIn(accessToken);
-        checkAuthentication(userAuthToken);
+        if (userAuthToken == null) {
+            return new ResponseEntity<>("Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
+        }
 
+        if (userAuthToken.getLogoutAt() != null) {
+            return new ResponseEntity<Object>("You have already logged out. Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
+        }
+        User user = userAuthToken.getUser();
 
-        int loggedInUserId = 1;//user.getId();
+        int loggedInUserId = user.getId();
 
         Matcher zipCode = Constants.VALID_ZIP_CODE.matcher(zipcode);
         if (!zipCode.matches()) {
@@ -70,9 +76,13 @@ public class AddressController {
 
 
             UserAuthToken userAuthToken = userAuthTokenService.isUserLoggedIn(accessToken);
-            checkAuthentication(userAuthToken);
+        if (userAuthToken == null) {
+            //return new ResponseEntity<>("Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
+        }
 
-            User user = userAuthToken.getUser();
+        if (userAuthToken.getLogoutAt() != null) {
+            //return new ResponseEntity<>("You have already logged out. Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
+        }
 
 
         return addCRUD.getAllPermAddressForUser("tset");
@@ -86,7 +96,13 @@ public class AddressController {
 
 
             UserAuthToken userAuthToken = userAuthTokenService.isUserLoggedIn(accessToken);
-            checkAuthentication(userAuthToken);
+        if (userAuthToken == null) {
+            return new ResponseEntity<>("Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
+        }
+
+        if (userAuthToken.getLogoutAt() != null) {
+            return new ResponseEntity<Object>("You have already logged out. Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
+        }
 
         if (addCRUD.findAllAdressById(addId).size()==0) {
             return new ResponseEntity<Object>("No address with this address id!", HttpStatus.BAD_REQUEST);
@@ -104,7 +120,13 @@ public class AddressController {
 
 
             UserAuthToken userAuthToken = userAuthTokenService.isUserLoggedIn(accessToken);
-            checkAuthentication(userAuthToken);
+        if (userAuthToken == null) {
+            return new ResponseEntity<>("Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
+        }
+
+        if (userAuthToken.getLogoutAt() != null) {
+            return new ResponseEntity<Object>("You have already logged out. Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
+        }
 
 
         if (addCRUD.findAllAdressById(addId).size()==0) {
@@ -121,7 +143,7 @@ public class AddressController {
     }
 
     private ResponseEntity<?> checkAuthentication(UserAuthToken userAuthToken){
-        String accessToken = "someValue";
+        //String accessToken = "someValue";
         //UserAuthToken userAuthToken = userAuthTokenService.isUserLoggedIn(accessToken);
         if (userAuthToken == null) {
             return new ResponseEntity<>("Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
