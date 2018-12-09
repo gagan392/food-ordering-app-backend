@@ -27,17 +27,6 @@ public class AddressController {
     private UserAuthTokenService userAuthTokenService;
 
 
-    //Test Method
-    @GetMapping("/address/")
-    @CrossOrigin
-    public ResponseEntity<?> getAddress(@RequestParam("pkID") int pkID){
-
-
-
-        return null;
-    }
-    //End Test Method
-
 
     @PostMapping("/address")
     @CrossOrigin
@@ -84,30 +73,55 @@ public class AddressController {
     public Iterable<Address> getAllPermanentAddresses(){
         if(false){//Stub code
 
-            String accessToken = "someOtherValue";
+            String accessToken = "someOtherTestValue";
             UserAuthToken userAuthToken = userAuthTokenService.isUserLoggedIn(accessToken);
             checkAuthentication(userAuthToken);
 
             User user = userAuthToken.getUser();
         }//Stub code
 
-        return null;
+        return addCRUD.getAllPermAddressForUser("tset");
 
     }
 
 
     @PutMapping("/address/")
     @CrossOrigin
-    public ResponseEntity<?> updatePermanentAddress(){
+    public ResponseEntity<?> updatePermanentAddress(@RequestParam String Flat_Building_Number,@RequestParam String Locality,@RequestParam String City,@RequestParam String Zip_Code,@RequestParam String State_Id,@RequestParam(value = "Address Id", required = true) int addId){
 
-        return null;
+        if(false){//Stub code
+
+            String accessToken = "someStringValue";
+            UserAuthToken userAuthToken = userAuthTokenService.isUserLoggedIn(accessToken);
+            checkAuthentication(userAuthToken);
+
+            User user = userAuthToken.getUser();
+        }//Stub code
+        if (addCRUD.findAllAdressById(addId).size()==0) {
+            return new ResponseEntity<Object>("No address with this address id!", HttpStatus.BAD_REQUEST);
+        }
+        //Now start the update function
+
+        return new ResponseEntity<Object>("Address has been updated successfully!", HttpStatus.OK);
     }
 
     @DeleteMapping("/address/")
     @CrossOrigin
-    public ResponseEntity<?> deletePermanentAddress(){
+    public ResponseEntity<?> deletePermanentAddress(@RequestParam(value = "Address Id", required = true) int addId){
 
-        return null;
+        if(false){//Stub code
+
+            String accessToken = "someDeleteValue";
+            UserAuthToken userAuthToken = userAuthTokenService.isUserLoggedIn(accessToken);
+            checkAuthentication(userAuthToken);
+
+            User user = userAuthToken.getUser();
+        }//Stub code
+        if (addCRUD.findAllAdressById(addId).size()==0) {
+            return new ResponseEntity<Object>("No address with this address id!", HttpStatus.BAD_REQUEST);
+        }
+        addCRUD.deletePermAddressForUser(addId);
+        return new ResponseEntity<Object>("Address has been deleted successfully!", HttpStatus.OK);
     }
     @GetMapping("/states}")
     @CrossOrigin

@@ -21,13 +21,5 @@ public interface UserRepository extends CrudRepository<User, Integer> {
     @Query(nativeQuery = true,value = "SELECT * FROM USERS WHERE contact_number=?1")
     User findUser(String contactNumber);
 
-    @Query(nativeQuery = true, value = "SELECT USERS.ID, ADDRESS.flat_buil_number,ADDRESS.locality,ADDRESS.city," +
-            "ADDRESS.zipcode,ADDRESS.state_id,STATES.STATE_NAME\n" +
-            "FROM USERS\n" +
-            "INNER JOIN ADDRESS\n" +
-            "ON USERS.ID = ADDRESS.ID\n" +
-            "INNER JOIN STATES\n" +
-            "ON STATES.ID = ADDRESS.ID WHERE USERS.ID ?1")
-    List<Address> getAll();
 }
 

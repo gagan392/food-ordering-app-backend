@@ -8,6 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.upgrad.models.Address;
 
 
+import java.util.List;
+
+
 @Repository
 public interface AddressRepository extends CrudRepository<Address, Integer> {
     @Query(nativeQuery = true,value="SELECT locality FROM address WHERE id=?1")
@@ -25,4 +28,17 @@ public interface AddressRepository extends CrudRepository<Address, Integer> {
 
     @Query(nativeQuery = true, value = "SELECT ID FROM ADDRESS ORDER BY ID DESC LIMIT 1")
     int findIdForLatestAddress();
+
+    @Query(nativeQuery = true,value="SELECT * FROM address WHERE id=?1")
+    List<Address> findAddressByGivenId(int id);
+
+    @Query(nativeQuery = true, value = "SELECT USERS.ID, ADDRESS.flat_buil_number,ADDRESS.locality,ADDRESS.city," +
+            "ADDRESS.zipcode,ADDRESS.state_id,STATES.STATE_NAME\n" +
+            "FROM USERS\n" +
+            "INNER JOIN ADDRESS\n" +
+            "ON USERS.ID = ADDRESS.ID\n" +
+            "INNER JOIN STATES\n" +
+            "ON STATES.ID = ADDRESS.ID WHERE USERS.ID=?1")
+    List<Address> getAllPermAddByUser(int id);
+
 }

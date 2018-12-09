@@ -1,30 +1,25 @@
 package org.upgrad.models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name="states")
+@Table(name = "states")
 public class States {
 
     @Id
-    @Column(name="id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
 
-    @Column(name="state_name")
-    private String state_name;
+    @Column(name = "state_name")
+    private String stateName;
 
-    public States(){}
+    public States() {
+    }
 
-
-
-    public States(int id, String state_name) {
-        this.id = id;
-
-        this.state_name = state_name;
+    public States(String stateName) {
+        this.stateName = stateName;
     }
 
     public int getId() {
@@ -35,21 +30,19 @@ public class States {
         this.id = id;
     }
 
-    public String getState_name() {
-        return state_name;
+    public String getStateName() {
+        return stateName;
     }
 
-    public void setState_name(String state_name) {
-        this.state_name = state_name;
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
-
-
 
     @Override
     public String toString() {
         return "States[" +
                 "id=" + id +
-                ", stateName='" + state_name + '\'' +
+                ", stateName='" + stateName + '\'' +
                 ']';
     }
 
@@ -59,12 +52,12 @@ public class States {
         if (o == null || getClass() != o.getClass()) return false;
         States states = (States) o;
         return id == states.id &&
-                Objects.equals(state_name, states.state_name);
+                Objects.equals(stateName, states.stateName);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, state_name);
-    }
+        return Objects.hash(id, stateName);}
+
 }
