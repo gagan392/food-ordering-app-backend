@@ -8,6 +8,6 @@ public class Constants {
     public static final Pattern VALID_CONTACT_NUMBER_REGEX = Pattern.compile("\\d{10}");
     public static final Integer PASSWORD_MIN_LENGTH = 8;
     public static final Pattern NUMBER_REGEX = Pattern.compile(".*\\d+.*");
-    public static final String SPECIAL_CHARS = "[#@$%&*!^]";
+    public static final Pattern SPECIAL_REGEX = Pattern.compile("[#@$%&*!^]");
 
 }
