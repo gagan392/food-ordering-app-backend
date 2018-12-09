@@ -38,8 +38,9 @@ public class AddressController {
 
     @PostMapping("/address")
     @CrossOrigin
-    public ResponseEntity<?> addAddress(){
-
+    public ResponseEntity<?> addAddress(@RequestParam(value = "Locality", required = true) String locality,@RequestParam(value = "Flat_building_number", required = true) String flat_building_number ,@RequestParam(value = "City", required = true) String city , @RequestParam(value = "Zipcode", required = true) String zipcode ,@RequestParam String Type,@RequestParam(value = "State Id", required = true) int stateId){
+        System.out.printf("[ADDRESS CONTROLLER] Details from the request - %s , %s , %s , %s , %d",locality,flat_building_number ,city ,zipcode,stateId);
+        addCRUD.addAddress(locality,flat_building_number ,city ,zipcode,stateId);
         return null;
     }
 
@@ -47,12 +48,8 @@ public class AddressController {
     @CrossOrigin
     public Iterable<Address> getAllPermanentAddresses(){
 
-        Iterable<Address> myVal = addCRUD.getAll();
-        for(Address val:myVal){
-            System.out.println(val);
-        }
+        return null;
 
-        return myVal;
     }
 
 

@@ -22,13 +22,27 @@ public class AddressServiceImpl implements AddressService{
 
 
     @Override
-    public String getOneAddressForId(int id) {
-        return addRepo.findAddressById(id);
+    public void addAddress(String locality,String flat_building_number ,String city ,  String zipcode, int stateId) {
+        Address addNew = new Address(locality,flat_building_number ,city ,zipcode,stateId);
+        //The save method is given by JPA hence need not be specifically written
+        System.out.printf("[ADDRESS SERVICE] Details from the request - %s , %s , %s , %s , %d\n",locality,flat_building_number ,city ,zipcode,stateId);
+        addRepo.save(addNew);
+
     }
 
+    @Override
+    public Iterable<Address> getAllPermAddressForUser(String accessToken) {
+        return null;
+    }
 
-    public Iterable<Address> getAll() {
-        return addRepo.findAll();
+    @Override
+    public boolean updatePermAddressForUser(int addressId) {
+        return false;
+    }
+
+    @Override
+    public boolean deletePermAddressForUser(int addressId) {
+        return false;
     }
 
     @Override
