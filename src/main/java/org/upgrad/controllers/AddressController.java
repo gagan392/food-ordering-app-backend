@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.upgrad.config.Constants;
 import org.upgrad.models.Address;
 import org.upgrad.models.States;
 import org.upgrad.models.User;
@@ -12,6 +13,8 @@ import org.upgrad.models.UserAuthToken;
 import org.upgrad.repositories.AddressRepository;
 import org.upgrad.services.AddressService;
 import org.upgrad.services.UserAuthTokenService;
+
+import java.util.regex.Matcher;
 
 @RestController
 @RequestMapping("/api")
@@ -45,20 +48,26 @@ public class AddressController {
         * */
         if(false){//Stub code
 
-
         String accessToken = "someValue";
         UserAuthToken userAuthToken = userAuthTokenService.isUserLoggedIn(accessToken);
-        if (userAuthToken == null) {
-            return new ResponseEntity<>("Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
-        }
-
-        if (userAuthToken.getLogoutAt() != null) {
-            return new ResponseEntity<Object>("You have already logged out. Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
-        }
+        checkAuthentication(userAuthToken);
 
         User user = userAuthToken.getUser();
         }//Stub code
+
+
         int loggedInUserId = 1;//user.getId();
+
+        Matcher zipCode = Constants.VALID_ZIP_CODE.matcher(zipcode);
+        if (!zipCode.matches()) {
+            return new ResponseEntity<Object>("Invalid zip code!", HttpStatus.BAD_REQUEST);
+        }
+        //State ID has to be valid
+        if (stateId<0 && stateId > 36) {
+            return new ResponseEntity<Object>("Invalid State Id!", HttpStatus.BAD_REQUEST);
+        }
+
+
 
         Address currAddress = addCRUD.addAddress(locality,flat_building_number ,city ,zipcode,stateId);
         System.out.println("Current address id is "+currAddress.getId());
@@ -66,13 +75,21 @@ public class AddressController {
 
         //Now need to add the two information in the user_address table.
         addCRUD.updateUserAddressOnNewAddressInsert(loggedInUserId,currAddress.getId(),Type);
-        //return new ResponseEntity<Object>(mapRestaurantResponse(restaurant), HttpStatus.OK);
-        return null;
+        return new ResponseEntity<Object>("Address has been updated successfully!", HttpStatus.OK);
+
     }
 
     @GetMapping("/address/user")
     @CrossOrigin
     public Iterable<Address> getAllPermanentAddresses(){
+        if(false){//Stub code
+
+            String accessToken = "someOtherValue";
+            UserAuthToken userAuthToken = userAuthTokenService.isUserLoggedIn(accessToken);
+            checkAuthentication(userAuthToken);
+
+            User user = userAuthToken.getUser();
+        }//Stub code
 
         return null;
 
@@ -99,6 +116,22 @@ public class AddressController {
         return addCRUD.getAllStates();
     }
 
+    private ResponseEntity<?> checkAuthentication(UserAuthToken userAuthToken){
+        String accessToken = "someValue";
+        //UserAuthToken userAuthToken = userAuthTokenService.isUserLoggedIn(accessToken);
+        if (userAuthToken == null) {
+            return new ResponseEntity<>("Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
+        }
+
+        if (userAuthToken.getLogoutAt() != null) {
+            return new ResponseEntity<Object>("You have already logged out. Please Login first to access this endpoint!", HttpStatus.UNAUTHORIZED);
+        }
+
+        //User user = userAuthToken.getUser();
+
+        return null;
+
+    }
 
 
 }
