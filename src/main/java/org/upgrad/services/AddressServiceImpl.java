@@ -44,8 +44,19 @@ public class AddressServiceImpl implements AddressService{
     }
 
     @Override
-    public boolean updatePermAddressForUser(int addressId) {
-        return false;
+    public void updatePermAddressForUser(String flat_buil_number,String locality,String city,String zipcode,int state_id ,int addressId) {
+
+        Address fetchAdd = addRepo.findAddressById(addressId);
+        //Set the values as recived from the HttpRequest, if blank then let it be as such
+
+        fetchAdd.setFlatBuilNo(flat_buil_number.length()==0?fetchAdd.getFlatBuilNo():flat_buil_number);
+        fetchAdd.setLocality(locality.length()==0?fetchAdd.getLocality():flat_buil_number);
+        fetchAdd.setCity(city.length()==0?fetchAdd.getCity():flat_buil_number);
+        fetchAdd.setZipcode(zipcode.length()==0?fetchAdd.getZipcode():flat_buil_number);
+        fetchAdd.setState(stateRepo.findStateById(state_id)==null?fetchAdd.getState():stateRepo.findStateById(state_id));
+
+        addRepo.editAddressValues(fetchAdd.getFlatBuilNo(),fetchAdd.getLocality(),fetchAdd.getCity(),fetchAdd.getZipcode(),state_id,addressId);
+
     }
 
     public void deletePermAddressForUser(int addressId) {

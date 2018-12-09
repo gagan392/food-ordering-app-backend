@@ -1,18 +1,20 @@
 package org.upgrad.repositories;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.upgrad.models.Address;
 
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 
 @Repository
 public interface AddressRepository extends CrudRepository<Address, Integer> {
-    @Query(nativeQuery = true,value="SELECT locality FROM address WHERE id=?1")
-    String findAddressById(int id);
+    @Query(nativeQuery = true,value="SELECT * FROM address WHERE id=?1")
+    Address findAddressById(int id);
 
     @Query(nativeQuery = true,value="SELECT * FROM address WHERE id=?1")
     List<Address> findAddressByGivenId(int id);
@@ -25,4 +27,10 @@ public interface AddressRepository extends CrudRepository<Address, Integer> {
             "INNER JOIN STATES\n" +
             "ON STATES.ID = ADDRESS.ID WHERE USERS.ID=?1")
     List<Address> getAllPermAddByUser(int id);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true,value="update address set flat_buil_number=?1,locality=?2,city=?3,zipcode=?4,state_id=?5  where id=?6")
+    void editAddressValues(String flat_buil_number,String locality,String city,String zipcode,int state_id ,int id);
+
 }

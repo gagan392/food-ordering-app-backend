@@ -17,7 +17,7 @@ public interface AddressService {
     Iterable<Address> getAllPermAddressForUser(String accessToken);
 
     //EndPoint#3 Update Permanent Address
-    boolean updatePermAddressForUser(int addressId);
+    void updatePermAddressForUser(String flat_buil_number,String locality,String city,String zipcode,int state_id ,int addressId);
 
     //EndPoint#4 Delete Permanent Address
     void deletePermAddressForUser(int addressId);

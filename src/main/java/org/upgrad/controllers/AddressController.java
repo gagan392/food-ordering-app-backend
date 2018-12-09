@@ -31,18 +31,13 @@ public class AddressController {
     @PostMapping("/address")
     @CrossOrigin
     //@RequestHeader String accessToken,
-    public ResponseEntity<?> addAddress(@RequestParam(value = "Locality", required = true) String locality,@RequestParam(value = "Flat_building_number", required = true) String flat_building_number ,@RequestParam(value = "City", required = true) String city , @RequestParam(value = "Zipcode", required = true) String zipcode ,@RequestParam String Type,@RequestParam(value = "State Id", required = true) int stateId){
+    public ResponseEntity<?> addAddress(@RequestHeader String accessToken,@RequestParam(value = "Locality", required = true) String locality,@RequestParam(value = "Flat_building_number", required = true) String flat_building_number ,@RequestParam(value = "City", required = true) String city , @RequestParam(value = "Zipcode", required = true) String zipcode ,@RequestParam String Type,@RequestParam(value = "State Id", required = true) int stateId){
         /*
         * User Authentication
         * */
-        if(false){//Stub code
 
-        String accessToken = "someValue";
         UserAuthToken userAuthToken = userAuthTokenService.isUserLoggedIn(accessToken);
         checkAuthentication(userAuthToken);
-
-        User user = userAuthToken.getUser();
-        }//Stub code
 
 
         int loggedInUserId = 1;//user.getId();
@@ -70,15 +65,15 @@ public class AddressController {
 
     @GetMapping("/address/user")
     @CrossOrigin
-    public Iterable<Address> getAllPermanentAddresses(){
-        if(false){//Stub code
+    public Iterable<Address> getAllPermanentAddresses(@RequestHeader String accessToken){
 
-            String accessToken = "someOtherTestValue";
+
+
             UserAuthToken userAuthToken = userAuthTokenService.isUserLoggedIn(accessToken);
             checkAuthentication(userAuthToken);
 
             User user = userAuthToken.getUser();
-        }//Stub code
+
 
         return addCRUD.getAllPermAddressForUser("tset");
 
@@ -87,36 +82,31 @@ public class AddressController {
 
     @PutMapping("/address/")
     @CrossOrigin
-    public ResponseEntity<?> updatePermanentAddress(@RequestParam String Flat_Building_Number,@RequestParam String Locality,@RequestParam String City,@RequestParam String Zip_Code,@RequestParam String State_Id,@RequestParam(value = "Address Id", required = true) int addId){
+    public ResponseEntity<?> updatePermanentAddress(@RequestHeader String accessToken,@RequestParam(value = "Flat_Building_Number", required = false) String Flat_Building_Number,@RequestParam(value = "Locality", required = false)  String Locality,@RequestParam(value = "City", required = false)  String City,@RequestParam(value = "Zip_Code", required = false)  String Zip_Code,@RequestParam(value = "State_Id", required = false)  int State_Id,@RequestParam(value = "Address Id", required = true) int addId){
 
-        if(false){//Stub code
 
-            String accessToken = "someStringValue";
             UserAuthToken userAuthToken = userAuthTokenService.isUserLoggedIn(accessToken);
             checkAuthentication(userAuthToken);
 
-            User user = userAuthToken.getUser();
-        }//Stub code
         if (addCRUD.findAllAdressById(addId).size()==0) {
             return new ResponseEntity<Object>("No address with this address id!", HttpStatus.BAD_REQUEST);
         }
         //Now start the update function
+
+        addCRUD.updatePermAddressForUser(Flat_Building_Number,Locality,City,Zip_Code,State_Id,addId);
 
         return new ResponseEntity<Object>("Address has been updated successfully!", HttpStatus.OK);
     }
 
     @DeleteMapping("/address/")
     @CrossOrigin
-    public ResponseEntity<?> deletePermanentAddress(@RequestParam(value = "Address Id", required = true) int addId){
+    public ResponseEntity<?> deletePermanentAddress(@RequestHeader String accessToken,@RequestParam(value = "Address Id", required = true) int addId){
 
-        if(false){//Stub code
 
-            String accessToken = "someDeleteValue";
             UserAuthToken userAuthToken = userAuthTokenService.isUserLoggedIn(accessToken);
             checkAuthentication(userAuthToken);
 
-            User user = userAuthToken.getUser();
-        }//Stub code
+
         if (addCRUD.findAllAdressById(addId).size()==0) {
             return new ResponseEntity<Object>("No address with this address id!", HttpStatus.BAD_REQUEST);
         }
