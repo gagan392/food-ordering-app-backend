@@ -4,15 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.upgrad.models.Restaurant;
-import org.upgrad.models.RestaurantCategory;
+import org.upgrad.models.*;
+import org.upgrad.requestResponseEntity.CategoryResponse;
 import org.upgrad.requestResponseEntity.RestaurantResponse;
+import org.upgrad.requestResponseEntity.RestaurantResponseCategorySet;
 import org.upgrad.services.RestaurantService;
 
-import javax.tools.JavaCompiler;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/restaurant")
@@ -30,7 +28,7 @@ public class RestaurantController {
     @CrossOrigin
     public ResponseEntity<?> fetchRestaurantList() {
         List<Restaurant> restaurants = restaurantService.getAll();
-        return new ResponseEntity<>(mapRestaurantResponse(restaurants), HttpStatus.OK);
+        return new ResponseEntity<>(mapRestaurantResponseList(restaurants), HttpStatus.OK);
     }
 
     /*
@@ -43,10 +41,10 @@ public class RestaurantController {
     @CrossOrigin
     public ResponseEntity<?> fetchRestaurantByName(@PathVariable String reastaurantName) {
         List<Restaurant> restaurants = restaurantService.getByName(reastaurantName);
-        if(restaurants.size() == 0) {
+        if (restaurants.size() == 0) {
             return new ResponseEntity<Object>("No Restaurant by this name!", HttpStatus.OK);
         }
-        return new ResponseEntity<Object>(mapRestaurantResponse(restaurants), HttpStatus.OK);
+        return new ResponseEntity<Object>(mapRestaurantResponseList(restaurants), HttpStatus.OK);
     }
 
 
@@ -60,24 +58,59 @@ public class RestaurantController {
     @CrossOrigin
     public ResponseEntity<?> fetchRestaurantByCategoryName(@PathVariable String categoryName) {
         List<Restaurant> restaurants = restaurantService.getByCategoryName(categoryName);
-        if(restaurants.size() == 0) {
+        if (restaurants.size() == 0) {
             return new ResponseEntity<Object>("No Restaurant by this category!", HttpStatus.OK);
         }
-        return new ResponseEntity<Object>(mapRestaurantResponse(restaurants), HttpStatus.OK);
+        return new ResponseEntity<Object>(mapRestaurantResponseList(restaurants), HttpStatus.OK);
     }
 
-    List<RestaurantResponse> mapRestaurantResponse(List<Restaurant> restaurants) {
+    /*
+     * This endpoint is used to list down only the Restaurants having user provided category name
+     * category name is partial/exact match, case insensitive match
+     * sorting restaurants in alphabetical order
+     * categories string in an alphabetical order
+     */
+    @GetMapping("/{restaurantId}")
+    @CrossOrigin
+    public ResponseEntity<?> fetchRestaurantById(@PathVariable int restaurantId) {
+        Restaurant restaurant = restaurantService.getById(restaurantId);
+        if (restaurant == null) {
+            return new ResponseEntity<Object>("No Restaurant by this id!", HttpStatus.OK);
+        }
+        return new ResponseEntity<Object>(mapRestaurantResponseCategorySet(restaurant), HttpStatus.OK);
+    }
+
+    RestaurantResponse mapRestaurantResponse(Restaurant restaurant) {
+        List<String> categories = new ArrayList<>();
+        for (RestaurantCategory restaurantCategory : restaurant.getRestaurantCategories()) {
+            categories.add(restaurantCategory.getCategory().getCategoryName());
+        }
+        Collections.sort(categories);
+        String categoriesCsv = String.join(",", categories);
+        RestaurantResponse restaurantResponse = new RestaurantResponse(restaurant.getId(), restaurant.getRestaurantName(), restaurant.getPhotoUrl(), restaurant.getUserRating(), restaurant.getAvgPrice(), restaurant.getNumberUsersRated(), restaurant.getAddress(), categoriesCsv);
+        return restaurantResponse;
+    }
+
+    List<RestaurantResponse> mapRestaurantResponseList(List<Restaurant> restaurants) {
         List<RestaurantResponse> restaurantResponses = new ArrayList<>();
         for (Restaurant restaurant : restaurants) {
-            List<RestaurantCategory> restaurantCategories = restaurant.getRestaurantCategories();
-            List<String> categories = new ArrayList<>();
-            for (RestaurantCategory restaurantCategory : restaurantCategories) {
-                categories.add(restaurantCategory.getCategory().getCategoryName());
-            }
-            Collections.sort(categories);
-            String categoriesCsv = String.join(",", categories);
-            restaurantResponses.add(new RestaurantResponse(restaurant.getId(), restaurant.getRestaurantName(), restaurant.getPhotoUrl(), restaurant.getUserRating(), restaurant.getAvgPrice(), restaurant.getNumberUsersRated(), restaurant.getAddress(), categoriesCsv));
+            restaurantResponses.add(mapRestaurantResponse(restaurant));
         }
-        return  restaurantResponses;
+        return restaurantResponses;
+    }
+
+    RestaurantResponseCategorySet mapRestaurantResponseCategorySet(Restaurant restaurant) {
+        List<RestaurantCategory> restaurantCategories = restaurant.getRestaurantCategories();
+        Set<CategoryResponse> categoryResponses = new HashSet<>();
+        for (RestaurantCategory restaurantCategory : restaurantCategories) {
+            Category category = restaurantCategory.getCategory();
+            Set<Item> items = new HashSet<>();
+            for (CategoryItem categoryItem : category.getCategoryItems()) {
+                items.add(categoryItem.getItem());
+            }
+            categoryResponses.add(new CategoryResponse(category.getId(), category.getCategoryName(), items));
+        }
+        RestaurantResponseCategorySet restaurantResponseCategorySet = new RestaurantResponseCategorySet(restaurant.getId(), restaurant.getRestaurantName(), restaurant.getPhotoUrl(), restaurant.getUserRating(), restaurant.getAvgPrice(), restaurant.getNumberUsersRated(), restaurant.getAddress(), categoryResponses);
+        return restaurantResponseCategorySet;
     }
 }
