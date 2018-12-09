@@ -1,9 +1,6 @@
 package org.upgrad.models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -14,6 +11,7 @@ public class UserAddress {
 
     @Id
     @Column(name="id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name="type")
@@ -41,8 +39,12 @@ public class UserAddress {
     }
     public UserAddress(){}
 
-    public UserAddress(int id, String type, int user_id, int address_id) {
-        this.id = id;
+    public UserAddress(String type, int user_id, int address_id) {
+        //this.id = id;
+        if(!type.equalsIgnoreCase("perm")){
+            type="temp";
+        }
+
         this.type = type;
         this.user_id = user_id;
         this.address_id = address_id;
