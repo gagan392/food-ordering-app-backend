@@ -22,11 +22,11 @@ public class AddressServiceImpl implements AddressService{
 
 
     @Override
-    public void addAddress(String locality,String flat_building_number ,String city ,  String zipcode, int stateId) {
+    public Address addAddress(String locality,String flat_building_number ,String city ,  String zipcode, int stateId) {
         Address addNew = new Address(locality,flat_building_number ,city ,zipcode,stateId);
         //The save method is given by JPA hence need not be specifically written
         System.out.printf("[ADDRESS SERVICE] Details from the request - %s , %s , %s , %s , %d\n",locality,flat_building_number ,city ,zipcode,stateId);
-        addRepo.save(addNew);
+        return addRepo.save(addNew);
 
     }
 
@@ -50,5 +50,10 @@ public class AddressServiceImpl implements AddressService{
         return stateRepo.findAll();
     }
 
+    @Override
+    public void updateUserAddressOnNewAddressInsert(String userID,String addressId,String type){
+        //When a new address was added it should be updated in the User_Address Table.
 
+
+    }
 }
