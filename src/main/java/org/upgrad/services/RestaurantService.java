@@ -13,4 +13,6 @@ public interface RestaurantService {
     List<Restaurant> getByCategoryName(String categoryName);
 
     Restaurant getById(int restaurantId);
+
+    Restaurant update(Restaurant restaurant);
 }
