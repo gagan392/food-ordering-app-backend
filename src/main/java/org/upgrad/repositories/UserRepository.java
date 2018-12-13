@@ -4,7 +4,11 @@ package org.upgrad.repositories;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+import org.upgrad.models.Address;
+import org.upgrad.models.Restaurant;
 import org.upgrad.models.User;
+
+import java.util.List;
 
 // This repository interface is responsible for the interaction between the user service with the user database
 
@@ -16,5 +20,6 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 
     @Query(nativeQuery = true,value = "SELECT * FROM USERS WHERE contact_number=?1")
     User findUser(String contactNumber);
+
 }
 

@@ -1,6 +1,7 @@
 package org.upgrad.models;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "states")
@@ -36,4 +37,27 @@ public class States {
     public void setStateName(String stateName) {
         this.stateName = stateName;
     }
+
+    @Override
+    public String toString() {
+        return "States[" +
+                "id=" + id +
+                ", stateName='" + stateName + '\'' +
+                ']';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        States states = (States) o;
+        return id == states.id &&
+                Objects.equals(stateName, states.stateName);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, stateName);}
+
 }

@@ -85,4 +85,5 @@ public class Address {
     public void setState(States state) {
         this.state = state;
     }
+
 }
